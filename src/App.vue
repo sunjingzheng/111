@@ -23,12 +23,20 @@ onMounted(()=>{
 //获取当前ID   通过ID调用接口   更新最新的列表
 const del=async(id)=>{
   console.log(id);
-  await axios.delete('/del/${id}')
+  await axios.delete(`/del/${id}`)
   getlist();
 }
-
-
+const editRef=ref(null);
+const onEdit=(row)=>{
+  // @ts-ignore
+  editRef.value.openEdit(row);
+}
 // TODO: 编辑功能
+//打开弹窗  回填数据  更新数据
+//1.打开弹窗 （获取子组件实例 调用方法或修改属性）
+//2.回填数据  （根据当前行数据  回填到弹窗中）
+//3.更新数据  （点击确认按钮  调用接口  更新数据）
+
 
 </script>
 
@@ -40,13 +48,13 @@ const del=async(id)=>{
       <el-table-column label="籍贯" prop="place"></el-table-column>
       <el-table-column label="操作" width="150">
         <template #default="{row}">
-          <el-button type="primary" link>编辑</el-button>
+          <el-button type="primary" @click="onEdit(row) ">编辑</el-button>
           <el-button type="danger" @click="del(row.id)" link>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
   </div>
-  <Edit />
+  <Edit ref="editRef" @refresh="getlist" />
 </template>
 
 <style scoped>
